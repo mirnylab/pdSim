@@ -7,7 +7,7 @@ MEMORY="128GB" # Normal node contains 128 GB of memory & 20 cores
 #MEMORY="196GB" # Normal node contains 128 GB of memory & 20 cores
 NODES=1
 CORES=20 #24
-SCRIPT="$HOME/pd_sim/single_sherlock_job.py"
+SCRIPT="$HOME/pdSim/single_sherlock_job.py"
 QUEUE="owners,hns"
 TIME=2-0
 
