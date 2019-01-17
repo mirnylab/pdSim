@@ -4,6 +4,7 @@
 old/*
 build/*
 pd_simulator_*
+__pycache__*
 
 # Compiled source #
 ###################
