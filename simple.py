@@ -15,7 +15,7 @@ import pandas as pd
 import numpy as np
 #from pmap import large_iter_pmap as pmap
 from pmap import pmap
-import warnings
+from theory import second as theoretical_model, mean_time
 ###############################################################################
 # Input Parameters
 ###############################################################################
@@ -78,6 +78,25 @@ mu for every run."""
                 Mean_Passengers=t.dem.eval("N*passengers").sum()/t.Nt[-1], 
                 MRCA_Age=len(t.Nt)*(t.MRCA.name - t.roots[0])/(t.leaves.index.to_series().mean() - t.roots[0]) if hasattr(t, 'MRCA') else 0)) 
 
+
+def get_N_0(model, P_cancer=0.5):
+    """Finds N_0 that leads to a particular P_cancer
+
+Returns (N_0, limit) where limit can be 'time' (time-limited) or 'meltdown' (limited by mutational-meltdown events).
+"""
+    from scipy.optimize import brentq
+    x = brentq(lambda x: model.pC(x) - P_cancer, 0.01, 10)
+    AnticipatedTime = mean_time(model, x)
+    isTimeLimited = AnticipatedTime > t_max
+    if isTimeLimited:
+        P_cancer = 0.5
+        try:
+            x = brentq(lambda x: mean_time(model, x) - t_max, 0.01, 7)
+        except ValueError:
+            x = brentq(lambda x: mean_time(model, x) - t_max, 0.01, 1e7)
+    
+    return x*model.N_eq, 'time' if isTimeLimited else 'meltdown'
+
 def simplest_simulations(sd, sp, Td=Td, Tp=number_of_functional_loci-Td, P_cancer=0.5, max_N_0=1e5, relative_nmax=2, trials=2000, map=pmap):
     """Simulates WXS dataset with the fewest free parameters possible. 
 
@@ -113,38 +132,33 @@ map: map function to use to broadcast the simulations. pmap (parallel map) broad
      across all threads on the computer. Moving forward, this algorithm may need to be fed a mapping 
      function that broadcasts simulations across Sherlock 2. 
 """
-    ## Compute N_0 from P_cancer
-    from simplified_theory import second as theoretical_model, mean_time
+    
     model = theoretical_model(Ud=1e-8*Td, Up=1e-8*Tp, sd=sd, sp=sp, N_0=100)
-    from scipy.optimize import brentq
-    x = brentq(lambda x: model.pC(x) - P_cancer, 0.01, 10)
-    if mean_time(model, x) > t_max:
-        warnings.warn('Progression likelihood is primarily time-limited (not meltdown-limited), setting P_cancer to 50% based on time to cancer.')
-        P_cancer = 0.5
-        try:
-            x = brentq(lambda x: mean_time(model, x) - t_max, 0.01, 7)
-        except ValueError:
-            x = brentq(lambda x: mean_time(model, x) - t_max, 0.01, 1e7)
-            
-    N_0 = x*model.N_eq
-    print("N_0:", N_0) 
-    if N_0 > max_N_0:
-        print("N_0 exceeds maximum value -- cancer isn't possible. \nSkipping...")
-        return None
+    N_0, limit = get_N_0(model, P_cancer=P_cancer)
+
+    info = pd.Series(dict(
+        N_0 = N_0,
+        limit=limit,
+        aboveMaxSize=N_0 > max_N_0))
+
+    output = pd.DataFrame([info for _ in range(trials)])
+    if info['aboveMaxSize']:
+        return output 
     
     ## Package parameters for broadcasting across distributed computing platform 
     absolute_nmax = int(round(max(N_0, model.N_eq)*relative_nmax))
     
     ## Simulate the tumors
-    tumors = pd.DataFrame(map(single_simulation,
-        [dict(Td=Td, Tp=Tp, nmax=absolute_nmax, sd=sd, sp=sp, N_0=N_0, t_max=t_max) for _ in range(trials)])) 
+    tumors = pd.DataFrame(list(map(single_simulation,
+        [dict(Td=Td, Tp=Tp, nmax=absolute_nmax, sd=sd, sp=sp, N_0=N_0, t_max=t_max) for _ in range(trials)]))) 
     
     ## Return statistics with two ways to estimate dN/dS
-    return tumors.assign(
+    return pd.concat([output, tumors.assign(
         omega_d      = tumors['Mean_Drivers']/(tumors.eval('Generations * mu')*Td),          # Exact (theroetical) dN/dS of drivers using known mutation rate
         omega_p      = tumors['Mean_Passengers']/(tumors.eval('Generations * mu')*Tp),       #   "  "                    of passenger   "   "
         driver_dS    = (Td/neutral_r*tumors.eval("Generations * mu")).apply(np.random.poisson), # Poisson-sampling of a quantity of synonymous mutations in drivers given the theoretical mutation rate and driver target size
         passenger_dS = (Tp/neutral_r*tumors.eval("Generations * mu")).apply(np.random.poisson)) #   "  "                                                 in passengers  "  "
+                     ], axis=1)
 
 if __name__ == '__main__':
     results = simplest_simulations(0.1, 0.001, trials=2000)

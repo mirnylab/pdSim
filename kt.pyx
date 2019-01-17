@@ -5,7 +5,7 @@ seterr(over='ignore', invalid='ignore', divide='ignore')
 from scipy.special import gammainc, gamma, erf
 import functools
 
-cdef extern from "c/distributions.h":
+cdef extern from "c/exponential.h":
     double exponential()
     void mt_init()
 

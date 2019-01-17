@@ -3,7 +3,7 @@ from distutils.core import setup, Extension
 from Cython.Build import cythonize
 import numpy
 
-scripts = ['alias_sampling.pyx', 'kt.pyx'] 
+scripts = ['bootstrap.pyx', 'kt.pyx'] 
 for script in scripts:
     short = script.split('.')[0]
     setup(

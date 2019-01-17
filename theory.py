@@ -128,13 +128,22 @@ class second(first):
     def vp(self): 
         return self.sp*Vp(self.Up, self.sp, self.N_0)
 
+def safe_integrate(func, a, b, **kwargs):
+    from scipy.integrate import quad, romberg
+    y, err, *output = quad(func, a, b, full_output=1, **kwargs)
+    out = romberg(func, a, b, **kwargs) if len(output) == 2 else y
+    #print(out, func(a), func(b), func.__name__)
+    return out
+
 def mean_time(model, x, n_low=0.35, n_high=7):
-    from scipy.integrate import quadrature
     D = 2/model.dN
+
     N_eq = model.N_eq
     vp = model.vp
     p = model.pC(x)
     gD = gamma(D)
+    
+    #print(D, gD, vp, x, N_eq)
 
     def I1(x):
         p = model.pC(x)
@@ -145,13 +154,13 @@ def mean_time(model, x, n_low=0.35, n_high=7):
         p = model.pC(x)
         de_mN = (D/x)**D*exp(-D/x)/gD
         return p*p/(de_mN*N_eq*N_eq)
-
-    if x < n_high:
+    
+    if x < n_high and gD < 1e200:
         C = D*N_eq/vp
         if x < n_low:
-            return C*quadrature(I1, n_low, n_high)[0] + log(n_low/x)/vp + x/(D*vp)
+            return C*safe_integrate(I1, n_low, n_high) + log(n_low/x)/vp + x/(D*vp)
         else:
-            return C*(quadrature(I1, x, n_high)[0] + (1-p)/p*(gamma(D-1)*(1 - gammainc(D - 1, D/n_low))/(D*N_eq*gD) + quadrature(I2, n_low, x)[0])) + 1/(n_high*vp)
+            return C*(safe_integrate(I1, x, n_high) + (1-p)/p*(gamma(D-1)*(1 - gammainc(D - 1, D/n_low))/(D*N_eq*gD) + safe_integrate(I2, n_low, x))) + 1/(n_high*vp)
     else:
         return 1/(vp*x)
 

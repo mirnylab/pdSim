@@ -107,7 +107,7 @@ map: map function to use to broadcast the simulations. pmap (parallel map) broad
      function that broadcasts simulations across Sherlock 2. 
 """
     ## Compute N_0 from P_cancer
-    from simplified_theory import second as theoretical_model, mean_time
+    from theory import second as theoretical_model, mean_time
     model = theoretical_model(Ud=1e-8*Td, Up=1e-8*Tp, sd=sd, sp=sp, N_0=1000)
     from scipy.optimize import brentq
     x = brentq(lambda x: model.pC(x) - P_cancer, 0.01, 10)
