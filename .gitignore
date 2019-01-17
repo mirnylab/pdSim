@@ -6,6 +6,10 @@ build/*
 pd_simulator_*
 __pycache__*
 
+# Output Files #
+################
+*.out
+
 # Compiled source #
 ###################
 *.com
