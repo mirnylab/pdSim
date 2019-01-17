@@ -1,6 +1,6 @@
 #/bin/bash
 
-NJOBS=10
+NJOBS=2
 DIRECTORY=`pwd`
 NAME=`basename $DIRECTORY`
 MEMORY="128GB" # Normal node contains 128 GB of memory & 20 cores

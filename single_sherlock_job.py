@@ -25,6 +25,6 @@ def simulation_wrapper(sd_sp_tuple):
 
 output = pmap(simulation_wrapper, params)
 
-df = pd.concat(output, keys=params, names=['sd', 'sp'], sort=False)
+df = pd.concat(output, keys=params, names=['sd', 'sp'])
 df.to_csv('SimSweep{:}.csv.gz'.format(job_ID), compression='gzip', index=False)
 
