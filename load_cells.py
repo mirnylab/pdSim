@@ -23,6 +23,10 @@ passenger_distribution (int, default: 0): Same as `driver_distribution`, except 
 
 shape (float, default: 1): Shape parameter for driver/passenger distributions. 
 
+tree (int, default: 0): If 1, will extract the entire phylogenetic tree (or lineage history) of the simulation. 
+    Currently, the only output that is kept are the lineages that contribute to the surviving population at the
+    end of simulation. 
+
 epistasis ({1, 2}, default: 2): 1 ~ `Additive Epistasis` between mutation, 2 ~ `Multiplicative Epistasis`.
 
 ctcs ({0, 1}, default: 0): If 1, create Circulating Tumor Cells (CTCs) for metastatic simulations. 

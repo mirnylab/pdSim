@@ -3,7 +3,7 @@ from distutils.core import setup, Extension
 from Cython.Build import cythonize
 import numpy
 
-scripts = ['bootstrap.pyx', 'kt.pyx'] 
+scripts = ['kt.pyx'] 
 for script in scripts:
     short = script.split('.')[0]
     setup(

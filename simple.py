@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Simplified access to Chris McFarland's deleterious passenger (and advantageous driver) cancer simulator. 
 
 Assumptions:
