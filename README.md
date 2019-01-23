@@ -40,3 +40,6 @@ The doc strings of the various methods and attributes should clarify the kinds o
 
 `simple.py` also provides a useful, well-documented example of how the simulator might be used to model dN/dS statistics.
 
+## Contact
+
+Please contact [Christopher McFarland](mailto:christopherdmcfarland@gmail.com) for all questions. 
