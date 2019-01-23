@@ -3,7 +3,7 @@ Gillespie simulations of advantageous drivers &amp; deleterious passengers in ca
 
 ## Overview
 
-This simulator is written in C with an emphasis on very-fast simulations of moderately-sized tumors. A forward Gillespie algorithm (the Next Reaction) is used to model cell birth, death, and mutations. 
+This simulator is written in C with an emphasis on very-fast simulations of moderately-sized tumors. A forward Gillespie algorithm (the Next Reaction) is used to model cell birth, death, and mutations. This code is written at a low-level and not designed for ease-of-use for the general population. 
 
 ## Installation
 
