@@ -162,11 +162,15 @@ class sim(first):
             self.fixed_mutations = self.getFixedMutations()
         end()
 
-    def plot(self):
+    def plot(self, figname=None):
         from matplotlib import pyplot as plt
-        plt.plot(self.Nt)
-        plt.xlabel('time (generations)'), plt.ylabel('population')
-        plt.savefig('temp.pdf')
+        ax = plt.plot(self.Nt)
+        ax.set( xlabel='time (generations)', 
+                ylabel='population')
+        if figname is not None:
+            plt.savefig(figname)
+        else:
+            return ax 
 
     def treat(self, double dsp=1, double du=1, dnmax=1.1):
         #assert self.state == 1, 'unsuccessful tumor'
