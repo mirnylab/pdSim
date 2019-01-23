@@ -3,7 +3,7 @@ Gillespie simulations of advantageous drivers &amp; deleterious passengers in ca
 
 ## Installation
 
-The simulator is written in C, however it is best accessed via a python wraper. To download the code & build the python wrapper:
+The simulator is written in C, however it is best accessed via a python wrapper. To download the code & build the python wrapper:
 
 ```sh
 $ git clone https://github.com/cd-mcfarland/pdSim.git # get repository
@@ -18,7 +18,7 @@ The simulator has a number of precompiler directives that alter the kind of simu
 4. Whether-or-not Circulating Tumor Cells (CTCs) are generated (to be used to simulate tumor growth at distant stroma),
 5. Whether-or-not drivers are drawn from a psuedo-random DFE, or an array of specific genes. 
 
-`load_cells.py` organizes these precompiler options into keyword arguments of a python function that then compiles the code accordingly and then retuns a python class `sim` (all at runtime). `sim` then executes a simulation upon instantiation. The various outputs of the simulation are accesss via methods and attributes of the returned object. An example of usage:
+`load_cells.py` organizes these precompiler options into keyword arguments of a python function that then compiles the code accordingly and then returns a python class `sim` (all at runtime). `sim` then executes a simulation upon instantiation. The various outputs of the simulation are accessed via methods and attributes of the returned object. An example of usage:
 
 ```python
 
@@ -27,8 +27,8 @@ The simulator has a number of precompiler directives that alter the kind of simu
 >>> tumor = sim(sd=0.25, N_0=300)                 # simulate tumor growth with non-default values of sd, N_0
 >>> passenger_mutations = tumor.fixed_mutations[tumor.fixed_mutations <= 0]  
 # fixed_mutations is a numpy.ndarray that records the fitness effects of every mutation that sweeps to fixation
-# in temporal order. Passeners are, by definition, neutral or deleterious mutations. 
+# in temporal order. Passengers are, by definition, neutral or deleterious mutations. 
 >>> print('Mean fitness cost of fixated passengers: {:.3f}'.format(passenger_mutations.mean())
 >>> tumor.plot()                                  # Plot the tumor's population size versus time.
 ```
-`simple.py` also provides a useful, well-documented example of how the simulator might be used to model dN/dS statistics. 
+`simple.py` also provides a useful, well-documented example of how the simulator might be used to model dN/dS statistics.
