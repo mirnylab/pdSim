@@ -26,7 +26,8 @@ The simulator has a number of precompiler directives that alter the kind of simu
 >>> sim = cells(passenger_distribution=2, tree=1) # passengers are drawn from a Log-Normal DFE; lineage is tracked
 >>> tumor = sim(sd=0.25, N_0=300)                 # simulate tumor growth with non-default values of sd, N_0
 >>> passenger_mutations = tumor.fixed_mutations[tumor.fixed_mutations <= 0]  
-# fixed_mutations is a numpy.ndarray that records the fitness effects of every mutation that sweeps to fixation in temporal order. Passeners are, by definition, neutral or deleterious mutations. 
+# fixed_mutations is a numpy.ndarray that records the fitness effects of every mutation that sweeps to fixation
+# in temporal order. Passeners are, by definition, neutral or deleterious mutations. 
 >>> print('Mean fitness cost of fixated passengers: {:.3f}'.format(passenger_mutations.mean())
 >>> tumor.plot()                                  # Plot the tumor's population size versus time.
 ```
