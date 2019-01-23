@@ -25,15 +25,14 @@ The simulator has a number of precompiler directives that alter the kind of simu
 `load_cells.py` organizes these precompiler options into keyword arguments of a python function that then compiles the code accordingly and then returns a python class `sim` (all at runtime). `sim` then executes a simulation upon instantiation. The various outputs of the simulation are accessed via methods and attributes of the returned object. An example of usage:
 
 ```python
-
->>> from load_cells import cells
->>> sim = cells(passenger_distribution=2, tree=1) # passengers are drawn from a Log-Normal DFE; lineage is tracked
->>> tumor = sim(sd=0.25, N_0=300)                 # simulate tumor growth with non-default values of sd, N_0
->>> passenger_mutations = tumor.fixed_mutations[tumor.fixed_mutations <= 0]  
+from load_cells import cells
+sim = cells(passenger_distribution=2, tree=1) # passengers are drawn from a Log-Normal DFE; lineage is tracked
+tumor = sim(sd=0.25, N_0=300)                 # simulate tumor growth with non-default values of sd, N_0
+passenger_mutations = tumor.fixed_mutations[tumor.fixed_mutations <= 0]  
 # fixed_mutations is a numpy.ndarray that records the fitness effects of every mutation that sweeps to fixation
 # in temporal order. Passengers are, by definition, neutral or deleterious mutations. 
->>> print('Mean fitness cost of fixated passengers: {:.3f}'.format(passenger_mutations.mean())
->>> tumor.plot()                                  # Plot the tumor's population size versus time.
+print('Mean fitness cost of fixated passengers: {:.3f}'.format(passenger_mutations.mean()))
+tumor.plot(figname='population_size_versus_time.pdf')
 ```
 
 The doc strings of the various methods and attributes should clarify the kinds of output you can retrieve. However, in general the code is not very accessible and was never written for general use. Knowledge of C & cython is needed, if you want to extend the code. 
