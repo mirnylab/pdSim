@@ -7,7 +7,7 @@ This simulator is written in C with an emphasis on very-fast simulations of mode
 
 ## Installation
 
-The simulator is written in C, however it is best accessed via a python wrapper. To download the code & build the python wrapper:
+The simulator is best accessed via a python wrapper. To download the code & build the python wrapper:
 
 ```sh
 $ git clone https://github.com/cd-mcfarland/pdSim.git # get repository
