@@ -18,7 +18,7 @@ The simulator has a number of precompiler directives that alter the kind of simu
 4. Whether-or-not Circulating Tumor Cells (CTCs) are generated (to be used to simulate tumor growth at distant stroma),
 5. Whether-or-not drivers are drawn from a psuedo-random DFE, or an array of specific genes. 
 
-`load_cells.py` organizes these precompiler options into keyword arguments of a python function that then compiles the code accordingly and then retuns a python class `sim`, which executes a simulation upon instantiation of `sim` objects. The various outputs of the simulation are accesss via methods and attributes of the object. An example of usage:
+`load_cells.py` organizes these precompiler options into keyword arguments of a python function that then compiles the code accordingly and then retuns a python class `sim` (all at runtime). `sim` then executes a simulation upon instantiation. The various outputs of the simulation are accesss via methods and attributes of the returned object. An example of usage:
 
 ```python
 
