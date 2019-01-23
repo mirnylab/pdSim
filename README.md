@@ -1,6 +1,10 @@
 # pdSim
 Gillespie simulations of advantageous drivers &amp; deleterious passengers in cancer
 
+## Overview
+
+This simulator is written in C with an emphasis on very-fast simulations of moderately-sized tumors. A forward Gillespie algorithm (the Next Reaction) is used to model cell birth, death, and mutations. 
+
 ## Installation
 
 The simulator is written in C, however it is best accessed via a python wrapper. To download the code & build the python wrapper:
@@ -31,4 +35,8 @@ The simulator has a number of precompiler directives that alter the kind of simu
 >>> print('Mean fitness cost of fixated passengers: {:.3f}'.format(passenger_mutations.mean())
 >>> tumor.plot()                                  # Plot the tumor's population size versus time.
 ```
+
+The doc strings of the various methods and attributes should clarify the kinds of output you can retrieve. However, in general the code is not very accessible and was never written for general use. Knowledge of C & cython is needed, if you want to extend the code. 
+
 `simple.py` also provides a useful, well-documented example of how the simulator might be used to model dN/dS statistics.
+
