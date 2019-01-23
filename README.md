@@ -32,6 +32,7 @@ passenger_mutations = tumor.fixed_mutations[tumor.fixed_mutations <= 0]
 # fixed_mutations is a numpy.ndarray that records the fitness effects of every mutation that sweeps to fixation
 # in temporal order. Passengers are, by definition, neutral or deleterious mutations. 
 print('Mean fitness cost of fixated passengers: {:.3f}'.format(passenger_mutations.mean()))
+# Mean fitness cost of fixated passengers: -0.001
 tumor.plot(figname='population_size_versus_time.pdf')
 ```
 
