@@ -54,7 +54,7 @@ static inline double gamma_distribution() {
 
 void inline update(cell_t *c, double ds) {
 #if TREE
-	update_haplotype(c, ds, t);
+	update_haplotype(c, ds);
 #endif
     c->bi *= EPISTASIS == 1 ? 1/(1+ds*c->bi) : 1-ds;
 }
