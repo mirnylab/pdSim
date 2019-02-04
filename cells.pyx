@@ -13,6 +13,7 @@ cdef extern from "c/cell_functions.h":
     ctypedef struct haplo_t:
         haplo_t *parent
         double ds
+        double t
     unsigned long simulation(unsigned long N_0, unsigned long t_max, unsigned long *Nt, double *Di, haplo_t **CTCs, double *fitness_array)
     unsigned long get_haplotype(unsigned long i) 
     double get_fitness(unsigned long i) 
@@ -42,11 +43,13 @@ class sim(first):
             haplo_t current_struct
             unsigned long next_parent
             unsigned long child_id
+            
         assert parent < haplo_id, "parent was created after me"
         addons = [(haplo_id, dict(
             children = [], 
             parent   = parent, 
-            ds       = my_struct.ds))]
+            ds       = my_struct.ds,
+            t        = my_struct.t))]
     
         child_id = haplo_id
         while parent not in self.haplotypes:
@@ -55,7 +58,8 @@ class sim(first):
             addons.append((parent, dict(
                 children=[],
                 parent=next_parent,
-                ds=current_struct.ds)))
+                ds=current_struct.ds,
+                t=current_struct.t)))
             child_id = parent
             parent = next_parent
     
@@ -70,7 +74,7 @@ class sim(first):
 
     def getDemographics(self, int n):
         # All initial cells have `0` as their haplotype parent -- this serves as a fake root to the haplotype tree
-        self.haplotypes = {0:dict(drivers=-1, passengers=0,children=[], parent=-1, ds=0)}    
+        self.haplotypes = {0:dict(drivers=-1, passengers=0,children=[], parent=-1, ds=0, t=0)}    
         # Because all initial cell fitnesses are >0, the root cells will all have a ds > 0 that will be annotated as a driver (even though they have no drivers). Setting the first driver to -1 fixes this.
         
         self.leaves = pd.Series(Counter([(get_haplotype(n_i), get_fitness(n_i)) for n_i in range(n)])).reset_index()
@@ -81,6 +85,7 @@ class sim(first):
         self.haplotypes = pd.DataFrame(self.haplotypes).T.sort_index()
         self.haplotypes.index.names = ['ID']
         self.haplotypes.loc[self.roots, 'ds'] = np.nan  
+        self.haplotypes.loc[self.roots, 't'] = 0
        
         self.leaves = self.leaves.set_index('ID')
         return pd.concat([self.leaves, self.haplotypes.loc[self.leaves.index, ['drivers', 'passengers']].astype(int)], axis=1)

@@ -6,6 +6,7 @@
 typedef struct haplo_t {        // The name for a haplotype in c is haplo-types, get it?
   struct haplo_t *parent;		// Every haplotype has a parent haplotype, thus defining the structure of the tree. 
   double ds;					// Every haplotype has a fitness that differs from its parent by ds. 
+  double t;
 } haplo_t;
 
 typedef struct geno_t {			/* table entry: */
@@ -53,7 +54,7 @@ static inline double gamma_distribution() {
 
 void inline update(cell_t *c, double ds) {
 #if TREE
-	update_haplotype(c, ds);
+	update_haplotype(c, ds, t);
 #endif
     c->bi *= EPISTASIS == 1 ? 1/(1+ds*c->bi) : 1-ds;
 }

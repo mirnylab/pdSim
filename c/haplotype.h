@@ -6,7 +6,7 @@
 
 static haplo_t *H, *H_end, *H_capacity;
 
-void update_haplotype(cell_t *c, double ds) {
+void update_haplotype(cell_t *c, double ds, double t0) {
 #if TREE
 	if (H_end >= H_capacity) {
 		unsigned new_length = EXPANSION_RATE*(H_capacity - H);
@@ -24,6 +24,7 @@ void update_haplotype(cell_t *c, double ds) {
 	}
 	H_end->parent = c->h;
     H_end->ds = ds;
+    H_end->t = t0;
 	c->h = H_end++;
 #endif
 }

@@ -77,7 +77,8 @@ mu for every run."""
                 mu=mu,
                 Mean_Drivers=t.dem.eval('N*drivers').sum()/t.Nt[-1],
                 Mean_Passengers=t.dem.eval("N*passengers").sum()/t.Nt[-1], 
-                MRCA_Age=len(t.Nt)*(t.MRCA.name - t.roots[0])/(t.leaves.index.to_series().mean() - t.roots[0]) if hasattr(t, 'MRCA') else 0)) 
+                MRCA_Age=t.MRCA.t if hasattr(t, 'MRCA') else 0)) 
+                #MRCA_Age=len(t.Nt)*(t.MRCA.name - t.roots[0])/(t.leaves.index.to_series().mean() - t.roots[0]) if hasattr(t, 'MRCA') else 0)) 
 
 
 def get_N_0(model, P_cancer=0.5):
