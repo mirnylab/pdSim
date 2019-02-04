@@ -169,7 +169,8 @@ class sim(first):
 
     def plot(self, figname=None):
         from matplotlib import pyplot as plt
-        ax = plt.plot(self.Nt)
+        ax = plt.gca()
+        ax.plot(self.Nt)
         ax.set( xlabel='time (generations)', 
                 ylabel='population')
         if figname is not None:
